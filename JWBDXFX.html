@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>接受邀请，免费得短信！</title>
+	<meta name="format-detection" content="telephone=no, email=no"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<style type="text/css">
+	body{overflow:hidden; overflow:visible; zoom:1;}
+	body{margin:0;padding: 0;min-height: 100vh;height: 100%;}/*去除图片的边距*/
+	.top img{width: 100%;height:100%;}
+	.rule img{width: 100%;height: 110%;}
+	.details img{width: 10px;height:12px;margin-left: 8px;margin-right: 8px;}
+	span{font-weight: bold;color: #573E1A;font-size: 16px;}
+	.zixun{background-color: white;font-size:0.7rem;color: #573E1A;width: 63%;}
+	ul{color:#6CC2E3;margin: auto 1rem;}
+	.detail{color:#573E1A;font-size: 14px;margin:3px 0;}
+	.huodongguize{margin-bottom: 12px;}
+	.tel input{color:#D6C5B4;outline:none;font-size: 16px;text-align: center;}
+	.put_code,.tel{    
+		border-top: 1px solid #573E1A;
+    	border-bottom: 1px solid #573E1A;
+		height: 31px;
+		width: 55%;	
+		margin: 0 auto;
+		padding:3px 0;
+    }
+    .tel{
+    	margin-top: 35px;
+		margin-bottom: 16px;
+    }
+	.put_code input{
+		font-size: 16px;
+		line-height: 31px;
+		float: left;
+		text-align: center;
+		background-color: transparent;
+		height: 100%;
+		padding:0;
+		border: none;
+		border-radius: 0;
+	}
+	.put_code input:nth-child(1){
+		color: #D6C5B4;
+		width: 55%;
+	}
+	.put_code input:nth-child(2){
+		width: 45%;
+		font-size: 12px;
+		color: #573E1A;
+		border-left: 1px solid #573E1A;
+	}
+	.submit span{box-shadow:0.2px 0.2px 5px  grey;width: 50%;height: 35px;border-radius: 20px;line-height: 35px;background: #6cc2e3;}
+	.submit span{width: 50%;height: 35px;border-radius: 20px;margin: 0 auto;display: block;margin-bottom: 20px;font-size: 14px;text-align: center;vertical-align: middle;outline:none;border: none;margin-top: 5px;}
+	.buttom img{width: 100%;height:1%;display: block;}
+	input{border:none;}
+	</style>
+	
+</head>
+<body>
+	<div class="top">
+		<img src="images\title.png" style="vertical-align : bottom" /><!--此处的style是为了去除上下图片之间的距离-->
+	</div>
+	<div class="rule" style="position: relative;width: 100%;height: 200px;">
+		<img src="images\rulebg.png"/>
+		<div style="position: absolute;top:15px;left: 0;">
+			<div class="details" align="center">
+				<div class="huodongguize">
+				<img src="images\LX.png"/><span>活动规则</span><img src="images\LX.png"/>
+				</div>
+				<hr width=78% size=1 color=#573E1A align=center noshade>
+				<p class="zixun">如有疑问，请咨询客服QQ：2355603175。</p>
+			</div>
+			<ul style="list-style-type:square">
+				<li><p class="detail">新用户接受邀请，输入手机号码，获取并输入验证码。</p></li>
+				<li><p class="detail">点击“接受邀请”，下载教务宝。</p></li>
+				<li><p class="detail">成功签到一个课节后，老用户与新用户都可免费获得100条短信。</p></li>
+			</ul>
+		</div>
+	</div>
+	<div class="tel">
+		<input type="tel" name="mobile" id="mobile" placeholder="请输入手机号码" ><!--这里的color是输入后文字的颜色-->
+	</div>
+	<div class="put_code">
+		<input type="text" id="verification_code" placeholder="验证码">
+		<input type="button" id="mbtime" value="获取验证码"/>
+	</div>
+	<br/>
+	<div class="submit">
+		<span id="checkPhone">接受邀请</div>
+	</div>
+	<div class="buttom">
+		<img src="images\buttom.png"/>
+	</div>
+	<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+	<script type="text/javascript">
+/*验证手机号码*/
+	$("#checkPhone").click(checkPhone);
+	$("#mbtime").click(mbtime);
+	function checkPhone(){ 
+    var mobile = document.getElementById('mobile').value;
+    if(!(/^1(3|4|5|7|8)\d{9}$/.test(mobile))){ 
+        alert("请输入正确的手机号");  
+        return false; 
+    } 
+    var code=$("#verification_code").val() || undefined;
+    if(!code){
+    	alert("请输入验证码");  
+        return false; 
+    }
+    location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.sc_edu.jwb"; 
+}
+var wait=20;
+/*点击获取验证码，等待20s*/
+function mbtime() {
+	var mobile = document.getElementById('mobile').value;
+    if(!(/^1(3|4|5|7|8)\d{9}$/.test(mobile))){ 
+        alert("请输入正确的手机号");  
+        return false; 
+    } 
+    if(wait == 20) {
+        //ajax发送短信
+        //向后台发送处理数据  
+       $.ajax({  
+            type: "POST", //用POST方式传输  
+            dataType: "text", //数据格式:JSON  
+            url: 'http://api.yunyuer.com/user/auth_send/', //目标地址  
+            data: {
+            	mobile:mobile,
+            	types:12
+            },  
+            error: function (XMLHttpRequest, textStatus, errorThrown) { 
+            
+
+            },  
+            success: function (msg){ 
+            
+            }  
+        }); 
+       	wait--;
+        mbtime();
+    }else if (wait == 0) {        
+        $("#mbtime").val("获取验证码");
+        	wait = 20;
+    }else{
+		$("#mbtime").val("重新发送(" + wait + "s)");
+		wait--;
+        setTimeout(function() {mbtime()},1000)
+    }
+   
+}
+</script>
+</body>
+</html>
